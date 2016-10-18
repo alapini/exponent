@@ -103,3 +103,4 @@ ios/RCTTest.podspec
 # Open source
 ios/Podfile.lock
 ios/Pods
+/android/Could

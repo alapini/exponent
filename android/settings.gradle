@@ -5,3 +5,5 @@ include ':ReactAndroid'
 project(':ReactAndroid').projectDir = new File(rootDir, 'ReactAndroid')
 include ':Android-Image-Cropper:cropper'
 project(':Android-Image-Cropper').projectDir = new File(rootDir, 'Android-Image-Cropper')
+include ':ReactNativeWebrtc'
+project(':ReactNativeWebrtc').projectDir = new File(rootDir, 'ReactNativeWebrtc')

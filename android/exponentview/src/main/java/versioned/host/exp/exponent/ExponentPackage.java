@@ -51,6 +51,8 @@ import versioned.host.exp.exponent.modules.api.components.barcodescanner.BarCode
 import versioned.host.exp.exponent.modules.internal.ExponentAsyncStorageModule;
 import versioned.host.exp.exponent.modules.internal.ExponentIntentModule;
 import versioned.host.exp.exponent.modules.internal.ExponentUnsignedAsyncStorageModule;
+import com.oney.WebRTCModule.WebRTCModule;
+import com.oney.WebRTCModule.RTCVideoViewManager;
 
 public class ExponentPackage implements ReactPackage {
 
@@ -113,6 +115,7 @@ public class ExponentPackage implements ReactPackage {
           nativeModules.add(new SegmentModule(reactContext, experienceIdEncoded));
           nativeModules.add(new BarCodeScannerModule(reactContext));
           nativeModules.add(new RNViewShotModule(reactContext));
+          nativeModules.add(new WebRTCModule(reactContext));
         } catch (JSONException e) {
           EXL.e(TAG, e.toString());
         } catch (UnsupportedEncodingException e) {
@@ -137,7 +140,8 @@ public class ExponentPackage implements ReactPackage {
     List<ViewManager> viewManagers = new ArrayList<>(Arrays.<ViewManager>asList(
         new LinearGradientManager(),
         new VideoViewManager(),
-        new BarCodeScannerViewManager()
+        new BarCodeScannerViewManager(),
+        new RTCVideoViewManager()
     ));
 
     // Add view managers from the react-native-svg package.

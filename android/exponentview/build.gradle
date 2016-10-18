@@ -109,6 +109,9 @@ dependencies {
   compile 'me.leolin:ShortcutBadger:1.1.4@aar'
   compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
   compile project(':Android-Image-Cropper:cropper')
+  compile(project(':ReactNativeWebrtc')) {
+      exclude group: 'com.facebook.react'
+  }
   compile 'com.facebook.rebound:rebound:0.3.8' // Needed for native animations in SDK 6
   compile 'com.yqritc:android-scalablevideoview:1.0.1'
   compile 'commons-codec:commons-codec:1.10'
