@@ -104,3 +104,4 @@ ios/RCTTest.podspec
 ios/Podfile.lock
 ios/Pods
 /android/Could
+android/ReactNativeWebrtc/build/

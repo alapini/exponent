@@ -61,6 +61,9 @@ public class PermissionsModule  extends ReactContextBaseJavaModule {
         case "camera": {
           askForCameraPermissions(promise);
         }
+        case "audio": {
+          askForAudioPermissions(promise);
+        }
         default:
           promise.reject("E_PERMISSION_UNSUPPORTED", String.format("Cannot request permission: %s", type));
       }
@@ -79,6 +82,10 @@ public class PermissionsModule  extends ReactContextBaseJavaModule {
       case "camera": {
         return getCameraPermissions();
       }
+      case "audio": {
+        return getAudioPermissions();
+      }
+
       default:
         return null;
     }
@@ -123,6 +130,27 @@ public class PermissionsModule  extends ReactContextBaseJavaModule {
     if (Build.VERSION.SDK_INT >= 23) {
       int cameraPermission = ContextCompat.checkSelfPermission(getReactApplicationContext(), android.Manifest.permission.CAMERA);
       if (cameraPermission == PackageManager.PERMISSION_GRANTED) {
+        response.putString("status", "granted");
+      } else {
+        response.putString("status", "denied");
+      }
+    } else {
+      response.putString("status", "granted");
+    }
+
+    response.putString("expires", PERMISSION_EXPIRES_NEVER);
+    WritableMap platformMap = Arguments.createMap();
+
+    return response;
+  }
+
+  private WritableMap getAudioPermissions() {
+    WritableMap response = Arguments.createMap();
+    Boolean isGranted = false;
+
+    if (Build.VERSION.SDK_INT >= 23) {
+      int audioPermission = ContextCompat.checkSelfPermission(getReactApplicationContext(), android.Manifest.permission.RECORD_AUDIO);
+      if (audioPermission == PackageManager.PERMISSION_GRANTED) {
         response.putString("status", "granted");
       } else {
         response.putString("status", "denied");
@@ -185,5 +213,21 @@ public class PermissionsModule  extends ReactContextBaseJavaModule {
         promise.resolve(getCameraPermissions());
       }
     }, permissions);
+  }
+
+  private void askForAudioPermissions(final Promise promise) {
+    final String[] permissions = new String[]{
+      Manifest.permission.RECORD_AUDIO,
+    };
+    Exponent.getInstance().getPermissions(new Exponent.PermissionsListener() {
+        @Override
+        public void permissionsGranted() {
+          promise.resolve(getAudioPermissions());
+        }
+        @Override
+        public void permissionsDenied() {
+          promise.resolve(getAudioPermissions());
+        }
+      }, permissions);
   }
 }
