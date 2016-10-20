@@ -60,9 +60,11 @@ public class PermissionsModule  extends ReactContextBaseJavaModule {
         }
         case "camera": {
           askForCameraPermissions(promise);
+          break;
         }
         case "audio": {
           askForAudioPermissions(promise);
+          break;
         }
         default:
           promise.reject("E_PERMISSION_UNSUPPORTED", String.format("Cannot request permission: %s", type));
