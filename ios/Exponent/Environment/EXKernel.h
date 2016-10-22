@@ -5,6 +5,9 @@
 
 #import "EXKernelBridgeRegistry.h"
 #import "EXKernelModule.h"
+#import "EXKernelUtil.h"
+
+@class EXViewController;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,6 +25,9 @@ FOUNDATION_EXPORT NSString *kEXKernelBundleResourceName;
               onSuccess: (void (^_Nullable)(NSDictionary * _Nullable ))success
               onFailure: (void (^_Nullable)(NSString * _Nullable ))failure;
 - (void)sendNotification: (NSDictionary *)notifBody toExperienceWithId: (NSString *)experienceId fromBackground:(BOOL)isFromBackground;
+
+- (void)registerRootExponentViewController: (EXViewController *)exponentViewController;
+- (EXViewController *)rootViewController;
 
 /**
  *  Similar to UIViewController::supportedInterfaceOrientations, but the value can vary depending on

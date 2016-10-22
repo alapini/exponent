@@ -6,6 +6,7 @@
 #import "EXErrorView.h"
 #import "EXFileDownloader.h"
 #import "EXKernel.h"
+#import "EXKernelUtil.h"
 
 #import "RCTDevLoadingView.h"
 #import "RCTRootView.h"
@@ -30,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
   if (self = [super init]) {
     _appManager = [[EXKernelReactAppManager alloc] initWithLaunchOptions:launchOptions];
     _appManager.delegate = self;
+    [[EXKernel sharedInstance] registerRootExponentViewController:self];
   }
   return self;
 }

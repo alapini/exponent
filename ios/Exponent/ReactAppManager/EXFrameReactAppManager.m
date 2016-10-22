@@ -1,5 +1,6 @@
 // Copyright 2015-present 650 Industries. All rights reserved.
 
+#import "EXAnalytics.h"
 #import "EXCachedResource.h"
 #import "EXFrame.h"
 #import "EXFrameReactAppManager.h"
@@ -12,7 +13,7 @@
 
 @implementation EXFrameReactAppManager
 
-- (instancetype)initWithFrame:(EXFrame *)frame
+- (instancetype)initWithEXFrame:(EXFrame *)frame
 {
   if (self = [super init]) {
     _frame = frame;
@@ -22,7 +23,7 @@
 
 - (BOOL)isReadyToLoad
 {
-  return (_frame.source != nil);
+  return (_frame && _frame.source != nil);
 }
 
 - (void)computeVersionSymbolPrefix
@@ -143,6 +144,22 @@
     return (isDeployedFromTool);
   }
   return false;
+}
+
+#pragma mark - Unversioned utilities for EXFrame
+
+- (void)logKernelAnalyticsEventWithParams:(NSDictionary *)params
+{
+  NSString *eventId = params[@"eventIdentifier"];
+  NSURL *manifestUrl = params[@"manifestUrl"];
+  NSDictionary *eventProperties = params[@"eventProperties"];
+
+  [[EXAnalytics sharedInstance] logEvent:eventId manifestUrl:manifestUrl eventProperties:eventProperties];
+}
+
+- (void)registerErrorForBridge:(NSError *)error
+{
+  [[EXKernel sharedInstance].bridgeRegistry setError:error forBridge:self.reactBridge];
 }
 
 @end
