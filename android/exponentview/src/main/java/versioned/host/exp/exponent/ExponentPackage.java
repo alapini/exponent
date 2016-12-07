@@ -52,6 +52,7 @@ import versioned.host.exp.exponent.modules.api.components.barcodescanner.BarCode
 import versioned.host.exp.exponent.modules.api.components.maps.MapsPackage;
 import versioned.host.exp.exponent.modules.api.components.svg.RNSvgPackage;
 import versioned.host.exp.exponent.modules.api.gl.GLViewManager;
+import versioned.host.exp.exponent.modules.api.sqlite.SQLitePlugin;
 import versioned.host.exp.exponent.modules.internal.ExponentAsyncStorageModule;
 import versioned.host.exp.exponent.modules.internal.ExponentIntentModule;
 import versioned.host.exp.exponent.modules.internal.ExponentUnsignedAsyncStorageModule;
@@ -120,6 +121,7 @@ public class ExponentPackage implements ReactPackage {
           nativeModules.add(new SegmentModule(reactContext, experienceIdEncoded));
           nativeModules.add(new BarCodeScannerModule(reactContext));
           nativeModules.add(new RNViewShotModule(reactContext));
+          nativeModules.add(new SQLitePlugin(reactContext));
         } catch (JSONException e) {
           EXL.e(TAG, e.toString());
         } catch (UnsupportedEncodingException e) {
