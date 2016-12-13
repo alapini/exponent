@@ -77,15 +77,25 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
      */
     protected Context context = null;
 
+	/**
+	 * Current experienceId
+	 */
+	protected String experienceId = null;
+
     /**
      * Thread pool for database operations
      */
     protected ExecutorService threadPool;
 
-    public SQLitePlugin(ReactApplicationContext reactContext) {
+    public SQLitePlugin(ReactApplicationContext reactContext, String experienceIdEncoded) {
         super(reactContext);
         this.context = reactContext.getApplicationContext();
+        this.experienceId = experienceIdEncoded;
         this.threadPool = Executors.newCachedThreadPool();
+    }
+
+    public String scopeDbName(String dbName) {
+		return "RKSqliteStorage-scoped-experience-" + this.getExperienceId() + "-" + dbName;
     }
 
     /**
@@ -197,6 +207,14 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
         return this.context;
     }
 
+	/**
+     *
+     * @return expirence ID
+     */
+    protected String getExperienceId(){
+        return this.experienceId;
+    }
+
     /**
      * Executes the request and returns PluginResult.
      *
@@ -241,6 +259,7 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
             case open:
                 o = args.getJSONObject(0);
                 dbname = o.getString("name");
+				dbname = scopeDbName(dbname);
                 // open database and start reading its queue
                 this.startDatabase(dbname, o, cbc);
                 break;
@@ -248,6 +267,7 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
             case close:
                 o = args.getJSONObject(0);
                 dbname = o.getString("path");
+				dbname = scopeDbName(dbname);
                 // put request in the q to close the db
                 this.closeDatabase(dbname, cbc);
                 break;
@@ -255,6 +275,7 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
             case attach:
                 o = args.getJSONObject(0);
                 dbname = o.getString("path");
+				dbname = scopeDbName(dbname);
 
                 // attach database
                 this.attachDatabase(dbname, o.getString("dbName"), o.getString("dbAlias"), cbc);
@@ -263,6 +284,7 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
             case delete:
                 o = args.getJSONObject(0);
                 dbname = o.getString("path");
+				dbname = scopeDbName(dbname);
 
                 deleteDatabase(dbname, cbc);
 
@@ -279,6 +301,7 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
                 JSONObject allargs = args.getJSONObject(0);
                 JSONObject dbargs = allargs.getJSONObject("dbargs");
                 dbname = dbargs.getString("dbname");
+				dbname = scopeDbName(dbname);
                 JSONArray txargs = allargs.getJSONArray("executes");
 
                 if (txargs.isNull(0)) {
@@ -378,7 +401,7 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
         InputStream in = null;
         File dbfile = null;
         try {
-            SQLiteDatabase database = this.getDatabase(dbname);
+			SQLiteDatabase database = this.getDatabase(dbname);
             if (database != null && database.isOpen()) {
                 //this only happens when DBRunner is cycling the db for the locking work around.
                 // otherwise, this should not happen - should be blocked at the execute("open") level

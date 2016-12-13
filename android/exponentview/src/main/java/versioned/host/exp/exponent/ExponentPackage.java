@@ -121,7 +121,7 @@ public class ExponentPackage implements ReactPackage {
           nativeModules.add(new SegmentModule(reactContext, experienceIdEncoded));
           nativeModules.add(new BarCodeScannerModule(reactContext));
           nativeModules.add(new RNViewShotModule(reactContext));
-          nativeModules.add(new SQLitePlugin(reactContext));
+          nativeModules.add(new SQLitePlugin(reactContext, experienceIdEncoded));
         } catch (JSONException e) {
           EXL.e(TAG, e.toString());
         } catch (UnsupportedEncodingException e) {
